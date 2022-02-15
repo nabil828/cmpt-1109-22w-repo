@@ -1,98 +1,80 @@
 #include <iostream>
 #include <fstream>
+
 using namespace std;
-int CHAPTER_NUMBER = 18;
-int get_next_chapter_num()
-{
-  if (CHAPTER_NUMBER == 0)
-    CHAPTER_NUMBER = 18;
-  return CHAPTER_NUMBER--;
+
+int NUMBER_OF_CHAPTERS = 0; 
+int get_next_number() {
+	return 18 - (NUMBER_OF_CHAPTERS++ % 18);
 }
-int main()
-{
-  ifstream obj_read;
-  char line_array[50];
-  while (true)
-  {
-    obj_read.open("answers.txt");
-    if (obj_read.fail())
-    {
-      cout << "Plz make sure your file name is correct!" << endl;
-    }
-    string q;
-    cout << endl
-         << "Enter your question" << endl;
-    cin >> q;
-    cin.ignore();
-    int counter = 0;
-    char x;
-    obj_read.get(x);
-    bool hash_found = false;
 
-    while (!obj_read.eof())
-    {
-      if (hash_found && x == 'N')
-      {
-        obj_read.get(x);
-        continue;
-      } // logic
-      if (x == '\n')
-      {
-        // print out the answer line
-        int i = 0;
-        while (true)
-        {
-          if (line_array[i] == '\n')
-          {
-            counter = 0;
-            // read next question
-            string q;
-            cout << endl
-                 << "Enter your question" << endl;
-            cin >> q;
-            cin.ignore();
-            break;
-          }
-          cout << line_array[i];
-          i++;
-        }
-        // cout << endl;
-      }
-      else
-      {
-        if (x == '#')
-        {
-          int next_number = get_next_chapter_num();
-          if (next_number < 10) // 1, 2, 3..
-            line_array[counter++] = '0' + next_number;
-          else
-          { // 10, 11, 12, ...
-            line_array[counter++] = '1';
-            line_array[counter++] = '0' + (next_number - 10);
-          }
-          hash_found = true;
-        }
-        else
-        {
-          line_array[counter++] = x;
-        }
-        line_array[counter] = '\n';
-      }
+int main() {
+	ifstream input_stream;
+	while (true) {
 
-      obj_read.get(x);
-    }
-    // print last answer
-    int i = 0;
-    while (true)
-    {
-      if (line_array[i] == '\n')
-      {
-        break;
-      }
-      cout << line_array[i];
-      i++;
-    }
-    obj_read.close();
-  }
-  return 0;
+		input_stream.open("answers.txt");
+		if (input_stream.fail()) {
+			cout << "Plz make sure that your file name correct";
+		}
+
+		//read a question
+		cout << "\nPlease enter your question" << endl;
+		string q; cin >> q;
+		cin.ignore();
+
+		char a_char;
+		input_stream.get(a_char);
+		int counter = 0;
+		char answer_arr[100];
+
+		bool hash_flag = false;
+		while (!input_stream.eof()) {
+			if (hash_flag && a_char == 'N') {
+
+				input_stream.get(a_char);
+				continue;
+			}
+
+			if (a_char == '\n') {
+				// output the answer
+				for (int i = 0; i < counter; i++)
+					cout << answer_arr[i];
+
+				// ask for another questions
+				// read a question
+				cout << "\nPlease enter your question" << endl;
+				string q; cin >> q;
+				cin.ignore();
+
+				counter = 0;
+			}
+			else if (a_char == '#') {
+				// may be should get the next number 18, 17, 16, ...10, 9, 8, ..., 1, 18, 17, ...
+				int x = get_next_number();
+				// add this this to the array
+				if (x >= 10) // two 
+				{
+					answer_arr[counter++] = '1';
+					answer_arr[counter++] = '0' + x - 10; // convert int -> char
+				}
+				else // one digit
+					answer_arr[counter++] = '0' + x;  //5 => '5' 
+											// 48 + 5 = 53
+
+				// Also, we have to ignore 'N'
+				hash_flag = true;
+
+			}
+			else {
+				answer_arr[counter++] = a_char;
+			}
+
+			input_stream.get(a_char);
+		}
+		input_stream.close();
+		// output the last answer
+		for (int i = 0; i < counter; i++)
+			cout << answer_arr[i];
+
+	}
 }

@@ -29,7 +29,7 @@ int main()
     // Rational ob3(1, 2);
     // Rational ob4(1, 4);
     // Rational result = ob3.sub(ob4);
-    // cout << result.get_numerator() << "/" << result.get_denominator() << endl; // 1/2
+    // cout << result.get_numerator() << "/" << result.get_denominator() << endl; // 1/4
 
     
     // 3

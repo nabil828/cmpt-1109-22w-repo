@@ -11,7 +11,6 @@ int main()
 {
     
 
-    
     // 1
     /////////////////////
     //.add() Test Cases//
@@ -130,6 +129,17 @@ int main()
     // cout << result.get_numerator() << "/" << result.get_denominator() << endl; // 5/6
 
    
+    // Tests for output() method
+    // Test case 1 - ouput to standard output
+    Rational ob1(66, 22);
+    ob1.output(cout); // printed to the console
+    
 
+    // Test case 2 - output to a file
+    ofstream ofstream_obj;
+    ofstream_obj.open("ch10_7_output.txt");
+    if(ofstream_obj.fail())
+        cout<< "cannot open ch10_7_output.txt";
+    ob1.output(ofstream_obj); // print to ch10_7_output.txt
     return 0;
 }
